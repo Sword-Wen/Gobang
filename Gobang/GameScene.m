@@ -120,27 +120,51 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     switch (direction) {
         case 1:
             result = [self checkSuccessWithColumn:column-1 Row:row+1 direction:1 color:colorType deep:deep+1];
+            if ((!result) && (deep == 1)) {
+                result = [self checkSuccessWithColumn:column+2 Row:row-2 direction:5 color:colorType deep:deep+1];
+            }
             break;
         case 2:
             result = [self checkSuccessWithColumn:column Row:row+1 direction:2 color:colorType deep:deep+1];
+            if ((!result) && (deep == 1)) {
+                result = [self checkSuccessWithColumn:column Row:row-2 direction:6 color:colorType deep:deep+1];
+            }
             break;
         case 3:
             result = [self checkSuccessWithColumn:column+1 Row:row+1 direction:3 color:colorType deep:deep+1];
+            if ((!result) && (deep == 1)) {
+                result = [self checkSuccessWithColumn:column-2 Row:row-2 direction:7 color:colorType deep:deep+1];
+            }
             break;
         case 4:
             result = [self checkSuccessWithColumn:column+1 Row:row direction:4 color:colorType deep:deep+1];
+            if ((!result) && (deep == 1)){
+                result = [self checkSuccessWithColumn:column-2 Row:row direction:8 color:colorType deep:deep+1];
+            }
             break;
         case 5:
             result = [self checkSuccessWithColumn:column+1 Row:row-1 direction:5 color:colorType deep:deep+1];
+            if ((!result) && (deep == 1)) {
+                result = [self checkSuccessWithColumn:column-2 Row:row+2 direction:1 color:colorType deep:deep+1];
+            }
             break;
         case 6:
             result = [self checkSuccessWithColumn:column Row:row-1 direction:6 color:colorType deep:deep+1];
+            if ((!result) && (deep == 1)) {
+                result = [self checkSuccessWithColumn:column Row:row+2 direction:2 color:colorType deep:deep+1];
+            }
             break;
         case 7:
             result = [self checkSuccessWithColumn:column-1 Row:row-1 direction:7 color:colorType deep:deep+1];
+            if ((!result) && (deep == 1)) {
+                result = [self checkSuccessWithColumn:column+2 Row:row+2 direction:3 color:colorType deep:deep+1];
+            }
             break;
         case 8:
             result = [self checkSuccessWithColumn:column-1 Row:row direction:8 color:colorType deep:deep+1];
+            if ((!result) && (deep == 1)) {
+                result = [self checkSuccessWithColumn:column+2 Row:row direction:4 color:colorType deep:deep+1];
+            }
             break;
             
         default:
