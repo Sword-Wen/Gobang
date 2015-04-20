@@ -18,7 +18,7 @@ typedef enum : int {
     redColor
 } GBChessPieceColor;
 
-@interface GameScene : SKScene
+@interface GameScene : SKScene <SKPhysicsContactDelegate>
 
 
 @end
