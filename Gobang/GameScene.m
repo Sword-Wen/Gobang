@@ -8,6 +8,9 @@
 
 #import "GameScene.h"
 
+static const uint32_t gbgBorderCategory = 0x01 << 0;
+static const uint32_t gbgChessPieceCategory = 0x01 << 1;
+
 @interface GameScene ()
 {
 }
@@ -21,20 +24,36 @@
 @property (readonly) CGFloat widthOfPipe;
 
 @property GBChessPieceColor nextColorType;
+@property int currentColumn;
+@property BOOL isFalling;
 
 @end
 
 
 @implementation GameScene
 
-int chessPieceNumOfPerPipe[] = {0};
+int chessPieceNumOfPerPipe[GBG_MAX_COLUMN_NUMBER] = {0};
 GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneColor};
+
+-(void)didBeginContact:(SKPhysicsContact *)contact
+{
+    NSLog(@"enter didBeginContact Func");
+    self.isFalling = FALSE;
+    int row = chessPieceNumOfPerPipe[self.currentColumn]-1;
+    if ([self isSuccessWithColumn:self.currentColumn Row:row withColor:statusMap[self.currentColumn][row]]) {
+        NSLog(@"Success at %i, %d", self.currentColumn+1, row+1);
+    }
+}
 
 -(void)appendChessPieceWithColumn:(int)column
 {
     if ((column > self.column - 1) || chessPieceNumOfPerPipe[column] >= self.row){
         return;
     }
+    if (self.isFalling == TRUE)
+        return;
+    
+    self.isFalling = TRUE;
     chessPieceNumOfPerPipe[column]++;
     
     SKSpriteNode * testNode = [SKSpriteNode spriteNodeWithColor:[SKColor redColor] size:CGSizeMake(self.widthOfPipe * 0.9, self.widthOfPipe * 0.9)];
@@ -44,26 +63,27 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
         testNode.name = @"white";
         self.nextColorType = redColor;
     }
-    else{
+    else if (self.nextColorType == redColor){
         testNode.color = [SKColor redColor];
         testNode.name = @"red";
         self.nextColorType = whiteColor;
     }
     testNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:testNode.size];
     testNode.physicsBody.dynamic = YES;
+    testNode.physicsBody.categoryBitMask = gbgChessPieceCategory;
+    testNode.physicsBody.collisionBitMask = gbgChessPieceCategory | gbgBorderCategory;
+    testNode.physicsBody.contactTestBitMask = gbgChessPieceCategory | gbgBorderCategory;
+    testNode.physicsBody.restitution = 0.0f;
     [self addChild:testNode];
 
     int row = chessPieceNumOfPerPipe[column]-1;
     if (self.nextColorType == whiteColor) {
         statusMap[column][row] = redColor;
     }
-    else{
+    else if (self.nextColorType == redColor){
         statusMap[column][row] = whiteColor;
     }
-    
-    if ([self isSuccessWithColumn:column Row:row withColor:statusMap[column][row]]) {
-        NSLog(@"Success at %i, %d", column+1, row+1);
-    }
+    self.currentColumn = column;
 }
 
 @dynamic widthOfPipe;
@@ -207,6 +227,10 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
         pipeNode.lineWidth = 1.0f;
         pipeNode.position = CGPointMake([self getMidXOfPipe:i], self.size.height / 2);
         pipeNode.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromPath:pipeNode.path];
+        pipeNode.physicsBody.categoryBitMask = gbgBorderCategory;
+        pipeNode.physicsBody.collisionBitMask = gbgChessPieceCategory;
+        pipeNode.physicsBody.contactTestBitMask = gbgChessPieceCategory;
+        pipeNode.physicsBody.restitution = 0.0f;
         [self addChild:pipeNode];
     }
 }
@@ -219,6 +243,9 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
         self.row = GBG_MAX_ROW_NUMBER;
         self.column = GBG_MAX_COLUMN_NUMBER;
         self.nextColorType = whiteColor;
+        self.physicsWorld.contactDelegate = self;
+        self.currentColumn = 0;
+        self.isFalling = FALSE;
         
         /* Created border here here */
         [self createPipes];
