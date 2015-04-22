@@ -27,7 +27,7 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
 @property int currentColumn;
 @property BOOL isFalling;
 
-@end
+@end // GameScene ()
 
 
 @implementation GameScene
@@ -43,6 +43,38 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     if ([self isSuccessWithColumn:self.currentColumn Row:row withColor:statusMap[self.currentColumn][row]]) {
         NSLog(@"Success at %i, %d", self.currentColumn+1, row+1);
     }
+}
+
+-(void)clickStartBtn
+{
+    NSLog(@"enter clickStartBtn method:");
+    [self resetScene];
+}
+
+-(void)resetScene
+{
+    [self enumerateChildNodesWithName:@"white" usingBlock:^(SKNode *node, BOOL *stop) {
+        [node removeFromParent];
+    }];
+    [self enumerateChildNodesWithName:@"red" usingBlock:^(SKNode *node, BOOL *stop) {
+        [node removeFromParent];
+    }];
+    
+    for (int i = 0; i < GBG_MAX_COLUMN_NUMBER; i++) {
+        chessPieceNumOfPerPipe[i] = 0;
+    }
+    
+    for (int i = 0; i < GBG_MAX_COLUMN_NUMBER; i++) {
+        for (int j = 0; j < GBG_MAX_ROW_NUMBER; j++) {
+            statusMap[i][j] = noneColor;
+        }
+    }
+    
+    self.row = GBG_MAX_ROW_NUMBER;
+    self.column = GBG_MAX_COLUMN_NUMBER;
+    self.nextColorType = whiteColor;
+    self.currentColumn = 0;
+    self.isFalling = FALSE;
 }
 
 -(void)appendChessPieceWithColumn:(int)column
@@ -235,6 +267,15 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     }
 }
 
+-(void)createLeftPane
+{
+    GBGLeftPane *leftPane = [[GBGLeftPane alloc] initWithColor:[SKColor yellowColor] size:CGSizeMake(self.spaceOfLeft, self.size.height)];
+    leftPane.anchorPoint = CGPointMake(0, 0);
+    leftPane.position = CGPointMake(0, 0);
+    [self addChild:leftPane];
+    [leftPane setStartBtnDelegate:self];
+}
+
 -(void)didMoveToView:(SKView *)view
 {
     
@@ -249,6 +290,9 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
         
         /* Created border here here */
         [self createPipes];
+        
+        /* Created the left pane in the game scene */
+        [self createLeftPane];
         
         self.contentCreated = YES;
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		797499751AE677E400273078 /* GBGLeftPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 797499741AE677E400273078 /* GBGLeftPane.m */; };
 		799677831ADE9837006164E6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 799677821ADE9837006164E6 /* main.m */; };
 		799677861ADE9837006164E6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 799677851ADE9837006164E6 /* AppDelegate.m */; };
 		799677891ADE9837006164E6 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 799677881ADE9837006164E6 /* GameScene.m */; };
@@ -16,6 +17,7 @@
 		799677931ADE9837006164E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 799677921ADE9837006164E6 /* Images.xcassets */; };
 		799677961ADE9837006164E6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799677941ADE9837006164E6 /* LaunchScreen.xib */; };
 		799677A21ADE9837006164E6 /* GobangTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 799677A11ADE9837006164E6 /* GobangTests.m */; };
+		79C1E8931AE7E9900038BE4D /* GBGMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C1E8921AE7E9900038BE4D /* GBGMenuItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		797499731AE677E400273078 /* GBGLeftPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBGLeftPane.h; sourceTree = "<group>"; };
+		797499741AE677E400273078 /* GBGLeftPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBGLeftPane.m; sourceTree = "<group>"; };
 		7996777D1ADE9837006164E6 /* Gobang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gobang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		799677811ADE9837006164E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		799677821ADE9837006164E6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -45,6 +49,8 @@
 		7996779B1ADE9837006164E6 /* GobangTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GobangTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		799677A01ADE9837006164E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		799677A11ADE9837006164E6 /* GobangTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GobangTests.m; sourceTree = "<group>"; };
+		79C1E8911AE7E9900038BE4D /* GBGMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBGMenuItem.h; sourceTree = "<group>"; };
+		79C1E8921AE7E9900038BE4D /* GBGMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBGMenuItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +94,10 @@
 			children = (
 				799677841ADE9837006164E6 /* AppDelegate.h */,
 				799677851ADE9837006164E6 /* AppDelegate.m */,
+				797499731AE677E400273078 /* GBGLeftPane.h */,
+				797499741AE677E400273078 /* GBGLeftPane.m */,
+				79C1E8911AE7E9900038BE4D /* GBGMenuItem.h */,
+				79C1E8921AE7E9900038BE4D /* GBGMenuItem.m */,
 				799677871ADE9837006164E6 /* GameScene.h */,
 				799677881ADE9837006164E6 /* GameScene.m */,
 				7996778A1ADE9837006164E6 /* GameScene.sks */,
@@ -230,7 +240,9 @@
 			files = (
 				7996778E1ADE9837006164E6 /* GameViewController.m in Sources */,
 				799677861ADE9837006164E6 /* AppDelegate.m in Sources */,
+				797499751AE677E400273078 /* GBGLeftPane.m in Sources */,
 				799677891ADE9837006164E6 /* GameScene.m in Sources */,
+				79C1E8931AE7E9900038BE4D /* GBGMenuItem.m in Sources */,
 				799677831ADE9837006164E6 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -430,6 +442,7 @@
 				799677A71ADE9837006164E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		799677A81ADE9837006164E6 /* Build configuration list for PBXNativeTarget "GobangTests" */ = {
 			isa = XCConfigurationList;
@@ -438,6 +451,7 @@
 				799677AA1ADE9837006164E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
