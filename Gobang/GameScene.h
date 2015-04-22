@@ -7,6 +7,7 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "GBGLeftPane.h"
 
 #define GBG_MAX_ROW_NUMBER 6
 #define GBG_MAX_COLUMN_NUMBER 7
@@ -18,7 +19,7 @@ typedef enum : int {
     redColor
 } GBChessPieceColor;
 
-@interface GameScene : SKScene <SKPhysicsContactDelegate>
+@interface GameScene : SKScene <SKPhysicsContactDelegate, GBGStartBtnDelegate>
 
 
 @end
