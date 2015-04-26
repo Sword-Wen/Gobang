@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		793435171AEBDA40001CAE87 /* GBGChessNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 793435161AEBDA40001CAE87 /* GBGChessNode.m */; };
 		797499751AE677E400273078 /* GBGLeftPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 797499741AE677E400273078 /* GBGLeftPane.m */; };
 		799677831ADE9837006164E6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 799677821ADE9837006164E6 /* main.m */; };
 		799677861ADE9837006164E6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 799677851ADE9837006164E6 /* AppDelegate.m */; };
@@ -31,6 +32,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		793435151AEBDA40001CAE87 /* GBGChessNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBGChessNode.h; sourceTree = "<group>"; };
+		793435161AEBDA40001CAE87 /* GBGChessNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBGChessNode.m; sourceTree = "<group>"; };
 		797499731AE677E400273078 /* GBGLeftPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBGLeftPane.h; sourceTree = "<group>"; };
 		797499741AE677E400273078 /* GBGLeftPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBGLeftPane.m; sourceTree = "<group>"; };
 		7996777D1ADE9837006164E6 /* Gobang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gobang.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +97,8 @@
 			children = (
 				799677841ADE9837006164E6 /* AppDelegate.h */,
 				799677851ADE9837006164E6 /* AppDelegate.m */,
+				793435151AEBDA40001CAE87 /* GBGChessNode.h */,
+				793435161AEBDA40001CAE87 /* GBGChessNode.m */,
 				797499731AE677E400273078 /* GBGLeftPane.h */,
 				797499741AE677E400273078 /* GBGLeftPane.m */,
 				79C1E8911AE7E9900038BE4D /* GBGMenuItem.h */,
@@ -240,6 +245,7 @@
 			files = (
 				7996778E1ADE9837006164E6 /* GameViewController.m in Sources */,
 				799677861ADE9837006164E6 /* AppDelegate.m in Sources */,
+				793435171AEBDA40001CAE87 /* GBGChessNode.m in Sources */,
 				797499751AE677E400273078 /* GBGLeftPane.m in Sources */,
 				799677891ADE9837006164E6 /* GameScene.m in Sources */,
 				79C1E8931AE7E9900038BE4D /* GBGMenuItem.m in Sources */,

@@ -30,4 +30,18 @@
     startGame.delegate = delegate;
 }
 
+-(void)setStartBtnTitle
+{
+    if (startGame != nil) {
+        startGame.text = @"Start Game";
+    }
+}
+
+-(void)setEndBtnTitle
+{
+    if (startGame != nil) {
+        startGame.text = @"End Game";
+    }
+}
+
 @end
