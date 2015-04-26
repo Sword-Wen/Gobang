@@ -37,28 +37,68 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
 
 -(void)didBeginContact:(SKPhysicsContact *)contact
 {
-    NSLog(@"enter didBeginContact Func");
     self.isFalling = FALSE;
     int row = chessPieceNumOfPerPipe[self.currentColumn]-1;
-    if ([self isSuccessWithColumn:self.currentColumn Row:row withColor:statusMap[self.currentColumn][row]]) {
-        NSLog(@"Success at %i, %d", self.currentColumn+1, row+1);
+
+    if ([self isWinWithColumn:self.currentColumn Row:row Color:statusMap[self.currentColumn][row] Depth:GBG_MAX_DEEP]) {
+        NSLog(@"Success at %i, %i.", self.currentColumn, row + 1);
+        [self doneSuccess];
     }
+}
+
+-(void)doneSuccess
+{
+    GBGPosition posChess;
+    for (NSValue *posChessVaule in succChess) {
+        [posChessVaule getValue:&posChess];
+        
+        /*  */
+        [self enumerateChildNodesWithName:@"white" usingBlock:^(SKNode *node, BOOL *stop) {
+            GBGChessNode *tmpChess = (GBGChessNode*)node;
+            if ((tmpChess.column == posChess.column) && (tmpChess.row == posChess.row)) {
+                SKAction *fadeout = [SKAction fadeOutWithDuration:0.5];
+                SKAction *fadein = [SKAction fadeInWithDuration:0.5];
+                SKAction *plus = [SKAction sequence:@[fadeout,fadein]];
+                [tmpChess runAction:[SKAction repeatActionForever:plus]];
+            }
+        }];
+        
+        [self enumerateChildNodesWithName:@"red" usingBlock:^(SKNode *node, BOOL *stop) {
+            GBGChessNode *tmpChess = (GBGChessNode*)node;
+            if ((tmpChess.column == posChess.column) && (tmpChess.row == posChess.row)) {
+                SKAction *fadeout = [SKAction fadeOutWithDuration:0.5];
+                SKAction *fadein = [SKAction fadeInWithDuration:0.5];
+                SKAction *plus = [SKAction sequence:@[fadeout,fadein]];
+                [tmpChess runAction:[SKAction repeatActionForever:plus]];
+            }
+        }];
+    }
+    
+    isStarting = FALSE;
+    [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] setStartBtnTitle];
 }
 
 -(void)clickStartBtn
 {
-    NSLog(@"enter clickStartBtn method:");
-    [self resetScene];
+    if (!isStarting) {
+        [self resetScene];
+        isStarting =TRUE;
+        [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] setEndBtnTitle];
+    }
+    else{
+        isStarting = FALSE;
+        [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] setStartBtnTitle];
+    }
 }
 
--(void)resetScene
+-(void)resetData
 {
-    [self enumerateChildNodesWithName:@"white" usingBlock:^(SKNode *node, BOOL *stop) {
-        [node removeFromParent];
-    }];
-    [self enumerateChildNodesWithName:@"red" usingBlock:^(SKNode *node, BOOL *stop) {
-        [node removeFromParent];
-    }];
+    self.row = GBG_MAX_ROW_NUMBER;
+    self.column = GBG_MAX_COLUMN_NUMBER;
+    self.nextColorType = whiteColor;
+    self.currentColumn = 0;
+    self.isFalling = FALSE;
+    isStarting = FALSE;
     
     for (int i = 0; i < GBG_MAX_COLUMN_NUMBER; i++) {
         chessPieceNumOfPerPipe[i] = 0;
@@ -70,15 +110,28 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
         }
     }
     
-    self.row = GBG_MAX_ROW_NUMBER;
-    self.column = GBG_MAX_COLUMN_NUMBER;
-    self.nextColorType = whiteColor;
-    self.currentColumn = 0;
-    self.isFalling = FALSE;
+    if (!succChess) {
+        succChess = [NSMutableArray arrayWithCapacity:GBG_MAX_DEEP+1];
+    }
+    [succChess removeAllObjects];
+}
+
+-(void)resetScene
+{
+    [self enumerateChildNodesWithName:@"white" usingBlock:^(SKNode *node, BOOL *stop) {
+        [node removeFromParent];
+    }];
+    [self enumerateChildNodesWithName:@"red" usingBlock:^(SKNode *node, BOOL *stop) {
+        [node removeFromParent];
+    }];
+    [self resetData];
 }
 
 -(void)appendChessPieceWithColumn:(int)column
 {
+    if (!isStarting) {
+        return;
+    }
     if ((column > self.column - 1) || chessPieceNumOfPerPipe[column] >= self.row){
         return;
     }
@@ -87,19 +140,20 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     
     self.isFalling = TRUE;
     chessPieceNumOfPerPipe[column]++;
-    
-    SKSpriteNode * testNode = [SKSpriteNode spriteNodeWithColor:[SKColor redColor] size:CGSizeMake(self.widthOfPipe * 0.9, self.widthOfPipe * 0.9)];
-    testNode.position = CGPointMake([self getMidXOfPipe:column], self.size.height * 0.9);
+
+    /* Create a chess node. */
+    GBGChessNode *testNode = NULL;
     if (self.nextColorType == whiteColor) {
-        testNode.color = [SKColor whiteColor];
+        testNode = [GBGChessNode spriteNodeWithTexture:greenChessTexture size:CGSizeMake(self.widthOfPipe * 0.9, self.widthOfPipe * 0.9)];
         testNode.name = @"white";
         self.nextColorType = redColor;
     }
     else if (self.nextColorType == redColor){
-        testNode.color = [SKColor redColor];
+        testNode = [GBGChessNode spriteNodeWithTexture:redChessTexture size:CGSizeMake(self.widthOfPipe * 0.9, self.widthOfPipe * 0.9)];
         testNode.name = @"red";
         self.nextColorType = whiteColor;
     }
+    testNode.position = CGPointMake([self getMidXOfPipe:column], self.size.height * 0.9);
     testNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:testNode.size];
     testNode.physicsBody.dynamic = YES;
     testNode.physicsBody.categoryBitMask = gbgChessPieceCategory;
@@ -111,9 +165,13 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     int row = chessPieceNumOfPerPipe[column]-1;
     if (self.nextColorType == whiteColor) {
         statusMap[column][row] = redColor;
+        testNode.column = column;
+        testNode.row =row;
     }
     else if (self.nextColorType == redColor){
         statusMap[column][row] = whiteColor;
+        testNode.column = column;
+        testNode.row = row;
     }
     self.currentColumn = column;
 }
@@ -140,88 +198,96 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     return ((self.size.width - self.widthOfPipe * self.column) / 2);
 }
 
--(BOOL)isSuccessWithColumn:(int)column Row:(int)row withColor:(GBChessPieceColor)colorType
+-(void)appendSuccChessPosWithColumn:(int)column Row:(int)row
 {
-    int direction = 1;
-    BOOL result = FALSE;
-    while (!result && (direction <= 8)) {
-        result = [self checkSuccessWithColumn:column Row:row direction:direction color:colorType deep:0];
-        direction++;
-    }
-    
-    return result;
+    GBGPosition pos;
+    pos.column = column;
+    pos.row = row;
+    NSValue *posValue = [NSValue valueWithBytes:&pos objCType:@encode(GBGPosition)];
+    [succChess addObject:posValue];
 }
 
--(BOOL)checkSuccessWithColumn:(int)column Row:(int)row direction:(int)direction color:(GBChessPieceColor)colorType deep:(int)deep
+-(BOOL)isWinWithColumn:(int)column Row:(int)row Color:(GBChessPieceColor)colorType Depth:(int)depth
 {
-    bool result = FALSE;
+    BOOL result = FALSE;
+    int sColumn = 0;
+    int sRow = 0;
     
-    if (deep > GBG_MAX_DEEP) {
-        return TRUE;
+    
+    /* Check at first of direction. */
+    [succChess removeAllObjects];
+    for (sColumn = column, sRow = 0; sRow <= GBG_MAX_ROW_NUMBER - depth; sRow++) {
+        result = TRUE;
+        for (int j = sRow, count = 0; count < depth; j++, count++) {
+            if (statusMap[sColumn][j] != colorType) {
+                result = FALSE;
+                break;
+            }
+            else{
+                [self appendSuccChessPosWithColumn:sColumn Row:j];
+            }
+        }
+        if (result == TRUE) {
+            return TRUE;
+        }
     }
     
-    if ((column < 0) || (row < 0) || (column >= self.column) || (row >= self.row)) {
-        return FALSE;
+    /* Check at second of direction. */
+    [succChess removeAllObjects];
+    for (sColumn = column, sRow = row; ((sColumn > 0) && (sRow > 0)); sColumn--, sRow--){
+    }
+    for (int i = sColumn, j = sRow; ((i < GBG_MAX_COLUMN_NUMBER - depth + 1) && (j < GBG_MAX_ROW_NUMBER - depth + 1)); i++,j++) {
+        result = TRUE;
+        for (int x = i, y = j, count = 0; count < depth; x++, y++, count++) {
+            if (statusMap[x][y] != colorType) {
+                result = FALSE;
+                break;
+            }
+            else{
+                [self appendSuccChessPosWithColumn:x Row:y];
+            }
+        }
+        if (result == TRUE) {
+            return TRUE;
+        }
     }
     
-    if (statusMap[column][row] != colorType) {
-        return FALSE;
+    /* Check at third of direction.  */
+    [succChess removeAllObjects];
+    for (sColumn = 0, sRow = row; sColumn < GBG_MAX_COLUMN_NUMBER - depth + 1; sColumn++) {
+        result = TRUE;
+        for (int j = sColumn, count = 0; count < depth; j++, count++) {
+            if (statusMap[j][sRow] != colorType) {
+                result = FALSE;
+                break;
+            }
+            else{
+                [self appendSuccChessPosWithColumn:j Row:sRow];
+            }
+        }
+        if (result == TRUE) {
+            return TRUE;
+        }
     }
     
-    /* Check whether the next-level is success. */
-    switch (direction) {
-        case 1:
-            result = [self checkSuccessWithColumn:column-1 Row:row+1 direction:1 color:colorType deep:deep+1];
-            if ((!result) && (deep == 1)) {
-                result = [self checkSuccessWithColumn:column+2 Row:row-2 direction:5 color:colorType deep:deep+1];
+    /* Check at fourth of direction. */
+    [succChess removeAllObjects];
+    for (sColumn = column, sRow = row; ((sColumn > 0) && (sRow < GBG_MAX_ROW_NUMBER - 1)); sColumn--, sRow++){
+    }
+    for (int i = sColumn, j = sRow; ((i < GBG_MAX_COLUMN_NUMBER - depth + 1) && (j >= depth)); i++,j--) {
+        result = TRUE;
+        for (int x = i, y = j; x < (i + depth); x++, y--) {
+            if (statusMap[x][y] != colorType) {
+                result = FALSE;
+                break;
             }
-            break;
-        case 2:
-            result = [self checkSuccessWithColumn:column Row:row+1 direction:2 color:colorType deep:deep+1];
-            if ((!result) && (deep == 1)) {
-                result = [self checkSuccessWithColumn:column Row:row-2 direction:6 color:colorType deep:deep+1];
+            else{
+                [self appendSuccChessPosWithColumn:x Row:y];
             }
-            break;
-        case 3:
-            result = [self checkSuccessWithColumn:column+1 Row:row+1 direction:3 color:colorType deep:deep+1];
-            if ((!result) && (deep == 1)) {
-                result = [self checkSuccessWithColumn:column-2 Row:row-2 direction:7 color:colorType deep:deep+1];
-            }
-            break;
-        case 4:
-            result = [self checkSuccessWithColumn:column+1 Row:row direction:4 color:colorType deep:deep+1];
-            if ((!result) && (deep == 1)){
-                result = [self checkSuccessWithColumn:column-2 Row:row direction:8 color:colorType deep:deep+1];
-            }
-            break;
-        case 5:
-            result = [self checkSuccessWithColumn:column+1 Row:row-1 direction:5 color:colorType deep:deep+1];
-            if ((!result) && (deep == 1)) {
-                result = [self checkSuccessWithColumn:column-2 Row:row+2 direction:1 color:colorType deep:deep+1];
-            }
-            break;
-        case 6:
-            result = [self checkSuccessWithColumn:column Row:row-1 direction:6 color:colorType deep:deep+1];
-            if ((!result) && (deep == 1)) {
-                result = [self checkSuccessWithColumn:column Row:row+2 direction:2 color:colorType deep:deep+1];
-            }
-            break;
-        case 7:
-            result = [self checkSuccessWithColumn:column-1 Row:row-1 direction:7 color:colorType deep:deep+1];
-            if ((!result) && (deep == 1)) {
-                result = [self checkSuccessWithColumn:column+2 Row:row+2 direction:3 color:colorType deep:deep+1];
-            }
-            break;
-        case 8:
-            result = [self checkSuccessWithColumn:column-1 Row:row direction:8 color:colorType deep:deep+1];
-            if ((!result) && (deep == 1)) {
-                result = [self checkSuccessWithColumn:column+2 Row:row direction:4 color:colorType deep:deep+1];
-            }
-            break;
-            
-        default:
-            result = FALSE;
-            break;
+        }
+        if (result == TRUE) {
+            return TRUE;
+        }
     }
     
     return result;
@@ -270,6 +336,7 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
 -(void)createLeftPane
 {
     GBGLeftPane *leftPane = [[GBGLeftPane alloc] initWithColor:[SKColor yellowColor] size:CGSizeMake(self.spaceOfLeft, self.size.height)];
+    leftPane.name = @"leftpane";
     leftPane.anchorPoint = CGPointMake(0, 0);
     leftPane.position = CGPointMake(0, 0);
     [self addChild:leftPane];
@@ -281,18 +348,19 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     
     if (!self.contentCreated) {
         /* set number of rows and columns */
-        self.row = GBG_MAX_ROW_NUMBER;
-        self.column = GBG_MAX_COLUMN_NUMBER;
-        self.nextColorType = whiteColor;
-        self.physicsWorld.contactDelegate = self;
-        self.currentColumn = 0;
-        self.isFalling = FALSE;
+        [self resetData];
         
         /* Created border here here */
         [self createPipes];
         
         /* Created the left pane in the game scene */
         [self createLeftPane];
+        
+        /* Created a green and a red chess texture. */
+        greenChessTexture = [SKTexture textureWithImageNamed:@"greenChess"];
+        redChessTexture = [SKTexture textureWithImageNamed:@"redChess"];
+        
+        self.physicsWorld.contactDelegate = self;
         
         self.contentCreated = YES;
     }

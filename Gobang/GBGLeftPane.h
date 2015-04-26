@@ -16,5 +16,7 @@
 }
 
 -(void)setStartBtnDelegate:(id<GBGStartBtnDelegate>)delegate;
+-(void)setStartBtnTitle;
+-(void)setEndBtnTitle;
 
 @end
