@@ -19,6 +19,7 @@
 		799677961ADE9837006164E6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 799677941ADE9837006164E6 /* LaunchScreen.xib */; };
 		799677A21ADE9837006164E6 /* GobangTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 799677A11ADE9837006164E6 /* GobangTests.m */; };
 		79C1E8931AE7E9900038BE4D /* GBGMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C1E8921AE7E9900038BE4D /* GBGMenuItem.m */; };
+		79E92B961AEFBD5000D5A3CF /* GBGRightPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 79E92B951AEFBD5000D5A3CF /* GBGRightPane.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,8 @@
 		799677A11ADE9837006164E6 /* GobangTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GobangTests.m; sourceTree = "<group>"; };
 		79C1E8911AE7E9900038BE4D /* GBGMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBGMenuItem.h; sourceTree = "<group>"; };
 		79C1E8921AE7E9900038BE4D /* GBGMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBGMenuItem.m; sourceTree = "<group>"; };
+		79E92B941AEFBD5000D5A3CF /* GBGRightPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBGRightPane.h; sourceTree = "<group>"; };
+		79E92B951AEFBD5000D5A3CF /* GBGRightPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBGRightPane.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +104,8 @@
 				793435161AEBDA40001CAE87 /* GBGChessNode.m */,
 				797499731AE677E400273078 /* GBGLeftPane.h */,
 				797499741AE677E400273078 /* GBGLeftPane.m */,
+				79E92B941AEFBD5000D5A3CF /* GBGRightPane.h */,
+				79E92B951AEFBD5000D5A3CF /* GBGRightPane.m */,
 				79C1E8911AE7E9900038BE4D /* GBGMenuItem.h */,
 				79C1E8921AE7E9900038BE4D /* GBGMenuItem.m */,
 				799677871ADE9837006164E6 /* GameScene.h */,
@@ -246,6 +251,7 @@
 				7996778E1ADE9837006164E6 /* GameViewController.m in Sources */,
 				799677861ADE9837006164E6 /* AppDelegate.m in Sources */,
 				793435171AEBDA40001CAE87 /* GBGChessNode.m in Sources */,
+				79E92B961AEFBD5000D5A3CF /* GBGRightPane.m in Sources */,
 				797499751AE677E400273078 /* GBGLeftPane.m in Sources */,
 				799677891ADE9837006164E6 /* GameScene.m in Sources */,
 				79C1E8931AE7E9900038BE4D /* GBGMenuItem.m in Sources */,

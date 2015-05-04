@@ -32,16 +32,17 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
 
 @implementation GameScene
 
-int chessPieceNumOfPerPipe[GBG_MAX_COLUMN_NUMBER] = {0};
-GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneColor};
-
 -(void)didBeginContact:(SKPhysicsContact *)contact
 {
+    if (self.isFalling == FALSE) {
+        return;
+    }
+    
     self.isFalling = FALSE;
     int row = chessPieceNumOfPerPipe[self.currentColumn]-1;
 
     if ([self isWinWithColumn:self.currentColumn Row:row Color:statusMap[self.currentColumn][row] Depth:GBG_MAX_DEEP]) {
-        NSLog(@"Success at %i, %i.", self.currentColumn, row + 1);
+        NSLog(@"Success at %i, %i.", self.currentColumn + 1, row + 1);
         [self doneSuccess];
     }
 }
@@ -118,16 +119,19 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
 
 -(void)resetScene
 {
+    /* Remove all chess pad. */
     [self enumerateChildNodesWithName:@"white" usingBlock:^(SKNode *node, BOOL *stop) {
         [node removeFromParent];
     }];
     [self enumerateChildNodesWithName:@"red" usingBlock:^(SKNode *node, BOOL *stop) {
         [node removeFromParent];
     }];
+    
+    /* Reset all data. */
     [self resetData];
 }
 
--(void)appendChessPieceWithColumn:(int)column
+-(void)appendChessPadWithColumn:(int)column
 {
     if (!isStarting) {
         return;
@@ -343,6 +347,15 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     [leftPane setStartBtnDelegate:self];
 }
 
+-(void)createRightPane
+{
+    GBGRightPane *rightPane = [[GBGRightPane alloc] initWithColor:[SKColor purpleColor] size:CGSizeMake(self.spaceOfRight, self.size.height)];
+    rightPane.name = @"rightpane";
+    rightPane.anchorPoint = CGPointMake(0, 0);
+    rightPane.position = CGPointMake(self.spaceOfLeft + self.widthOfPipe*GBG_MAX_COLUMN_NUMBER, 0);
+    [self addChild:rightPane];
+}
+
 -(void)didMoveToView:(SKView *)view
 {
     
@@ -355,6 +368,9 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
         
         /* Created the left pane in the game scene */
         [self createLeftPane];
+        
+        /* Created the right pane in the game scene */
+        [self createRightPane];
         
         /* Created a green and a red chess texture. */
         greenChessTexture = [SKTexture textureWithImageNamed:@"greenChess"];
@@ -371,7 +387,7 @@ GBChessPieceColor statusMap[GBG_MAX_COLUMN_NUMBER][GBG_MAX_ROW_NUMBER] = {noneCo
     /* Called when a touch begins */
     
     for (UITouch *touch in touches) {
-        [self appendChessPieceWithColumn:[self touchInPipe:touch]];
+        [self appendChessPadWithColumn:[self touchInPipe:touch]];
     }
 }
 
