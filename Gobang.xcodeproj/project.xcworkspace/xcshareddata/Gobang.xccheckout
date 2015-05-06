@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6B537802-ED47-4F71-87DC-22AA34594AA8</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Gobang</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>FC7061252E7DB83E99E335FB64E98C395A2A6951</key>
+		<string>https://github.com/franklyn-wjian/Gobang.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Gobang.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>FC7061252E7DB83E99E335FB64E98C395A2A6951</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/franklyn-wjian/Gobang.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>FC7061252E7DB83E99E335FB64E98C395A2A6951</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FC7061252E7DB83E99E335FB64E98C395A2A6951</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Gobang</string>
+		</dict>
+	</array>
+</dict>
+</plist>

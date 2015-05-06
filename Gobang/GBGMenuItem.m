@@ -12,7 +12,7 @@
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [self.delegate clickStartBtn];
+    [self.delegate clickMenuBtn:self.miType];
 }
 
 @end

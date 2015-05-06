@@ -45,6 +45,21 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
         NSLog(@"Success at %i, %i.", self.currentColumn + 1, row + 1);
         [self doneSuccess];
     }
+    else{
+        switch (self.nextColorType) {
+            case whiteColor:
+                [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] showWhiteChessPad];
+                break;
+                
+            case redColor:
+                [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] showRedChessPad];
+                break;
+                
+            default:
+                [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] showNoneChessPad];
+                break;
+        }
+    }
 }
 
 -(void)doneSuccess
@@ -79,17 +94,40 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
     [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] setStartBtnTitle];
 }
 
--(void)clickStartBtn
+-(void)clickMenuBtn:(GBGMenuItemType)miType
+{
+    switch (miType) {
+        case gbgMiStart:
+            [self clickStartMenuBtn];
+            break;
+            
+        case gbgMiSetting:
+            [self clickSettingMenuBtn];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)clickStartMenuBtn
 {
     if (!isStarting) {
         [self resetScene];
         isStarting =TRUE;
         [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] setEndBtnTitle];
+        [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] showWhiteChessPad];
     }
     else{
         isStarting = FALSE;
         [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] setStartBtnTitle];
+        [(GBGLeftPane*)[self childNodeWithName:@"leftpane"] showNoneChessPad];
     }
+}
+
+-(void)clickSettingMenuBtn
+{
+    NSLog(@"Clicked setting menu.");
 }
 
 -(void)resetData
@@ -219,7 +257,6 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
     
     
     /* Check at first of direction. */
-    [succChess removeAllObjects];
     for (sColumn = column, sRow = 0; sRow <= GBG_MAX_ROW_NUMBER - depth; sRow++) {
         result = TRUE;
         for (int j = sRow, count = 0; count < depth; j++, count++) {
@@ -234,10 +271,10 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
         if (result == TRUE) {
             return TRUE;
         }
+        [succChess removeAllObjects];
     }
     
     /* Check at second of direction. */
-    [succChess removeAllObjects];
     for (sColumn = column, sRow = row; ((sColumn > 0) && (sRow > 0)); sColumn--, sRow--){
     }
     for (int i = sColumn, j = sRow; ((i < GBG_MAX_COLUMN_NUMBER - depth + 1) && (j < GBG_MAX_ROW_NUMBER - depth + 1)); i++,j++) {
@@ -254,10 +291,10 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
         if (result == TRUE) {
             return TRUE;
         }
+        [succChess removeAllObjects];
     }
     
     /* Check at third of direction.  */
-    [succChess removeAllObjects];
     for (sColumn = 0, sRow = row; sColumn < GBG_MAX_COLUMN_NUMBER - depth + 1; sColumn++) {
         result = TRUE;
         for (int j = sColumn, count = 0; count < depth; j++, count++) {
@@ -272,13 +309,13 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
         if (result == TRUE) {
             return TRUE;
         }
+        [succChess removeAllObjects];
     }
     
     /* Check at fourth of direction. */
-    [succChess removeAllObjects];
     for (sColumn = column, sRow = row; ((sColumn > 0) && (sRow < GBG_MAX_ROW_NUMBER - 1)); sColumn--, sRow++){
     }
-    for (int i = sColumn, j = sRow; ((i < GBG_MAX_COLUMN_NUMBER - depth + 1) && (j >= depth)); i++,j--) {
+    for (int i = sColumn, j = sRow; ((i < GBG_MAX_COLUMN_NUMBER - depth + 1) && (j >= depth - 1)); i++,j--) {
         result = TRUE;
         for (int x = i, y = j; x < (i + depth); x++, y--) {
             if (statusMap[x][y] != colorType) {
@@ -292,6 +329,7 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
         if (result == TRUE) {
             return TRUE;
         }
+        [succChess removeAllObjects];
     }
     
     return result;
@@ -345,6 +383,7 @@ static const uint32_t gbgChessPieceCategory = 0x01 << 1;
     leftPane.position = CGPointMake(0, 0);
     [self addChild:leftPane];
     [leftPane setStartBtnDelegate:self];
+    [leftPane setSettingBtnDelegate:self];
 }
 
 -(void)createRightPane

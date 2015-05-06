@@ -26,7 +26,7 @@ typedef struct{
     int row;
 }GBGPosition;
 
-@interface GameScene : SKScene <SKPhysicsContactDelegate, GBGStartBtnDelegate>
+@interface GameScene : SKScene <SKPhysicsContactDelegate, GBGMenuBtnDelegate>
 {
 @private
     BOOL isStarting;

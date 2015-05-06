@@ -8,15 +8,24 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "GBGMenuItem.h"
+#import "GBGChessNode.h"
 
 @interface GBGLeftPane : SKSpriteNode
 {
 @private
-    GBGMenuItem *startGame;
+    GBGMenuItem *miStart;
+    GBGMenuItem *miSetting;
+    GBGChessNode *whiteChessPad;
+    GBGChessNode *redChessPad;
 }
 
--(void)setStartBtnDelegate:(id<GBGStartBtnDelegate>)delegate;
+-(void)setStartBtnDelegate:(id<GBGMenuBtnDelegate>)delegate;
 -(void)setStartBtnTitle;
 -(void)setEndBtnTitle;
+-(void)showWhiteChessPad;
+-(void)showRedChessPad;
+-(void)showNoneChessPad;
 
-@end
+-(void)setSettingBtnDelegate:(id<GBGMenuBtnDelegate>)delegate;
+
+@end // GBGLeftPane

@@ -8,14 +8,21 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-@protocol GBGStartBtnDelegate <NSObject>
+typedef enum : int{
+    gbgMiStart = 0,
+    gbgMiSetting,
+}GBGMenuItemType;
 
--(void)clickStartBtn;
+@protocol GBGMenuBtnDelegate <NSObject>
 
-@end // GBGStartBtnDelegate
+-(void)clickMenuBtn:(GBGMenuItemType) miType;
+
+@end // GBGMenuBtnDelegate
+
 
 @interface GBGMenuItem : SKLabelNode
 
-@property id<GBGStartBtnDelegate> delegate;
+@property GBGMenuItemType miType;
+@property id<GBGMenuBtnDelegate> delegate;
 
-@end
+@end // GBGMenuItem
